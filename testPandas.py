@@ -2,19 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-mydataset = {
-  'cars': ["BMW", "Volvo", "Ford"],
-  'passings': [3, 7, 2]
-}
-
-print(type(mydataset))
-
-myvar = pd.DataFrame(mydataset)
-
-print(myvar)
-
-print(type(myvar))
-
 baseURL = 'https://github.com/'  # Github domain
 
 # get user input
@@ -49,7 +36,7 @@ url = baseURL.removesuffix('/') + repoURL
 
 print('Repositories url link: ', url, end='\n\n')  # put link in console
 
-# Send a GET request to repositories url
+# Send a new GET request to repositories url
 response = requests.get(url)
 
 html_doc = response.text  # extract html contents
@@ -71,6 +58,5 @@ print(f'\nNumber of repositories found = {numRepos}\n')
 
 print(summaryTable)
 
-print(type(summaryTable))
-
 summaryTable.to_csv('capturedData.csv', index=False)
+print('\nWrote data to file: capturedData.csv.')
