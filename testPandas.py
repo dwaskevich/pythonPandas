@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 baseURL = 'https://github.com/'  # Github domain
+columnHeadings = ['Repo', 'URL', 'Language', 'Description']  # define data frame column headings
 
 # get user input
 while True:
@@ -25,14 +26,14 @@ html_doc = response.text  # extract html contents
 soup = BeautifulSoup(html_doc, 'html.parser')  # use BeautifulSoup to parse html
 
 # variable to hold repo url
-repoURL = ''
+repositoryURL = ''
 
 # find repo page url
 for tag in soup.find_all('a', {'data-tab-item': 'repositories'}):
-    repoURL = tag.get('href')
+    repositoryURL = tag.get('href')
 
 # construct repositories url (remove trailing '/' on base URL to avoid double slash)
-url = baseURL.removesuffix('/') + repoURL
+url = baseURL.removesuffix('/') + repositoryURL
 
 print('Repositories url link: ', url, end='\n\n')  # put link in console
 
@@ -42,16 +43,31 @@ response = requests.get(url)
 html_doc = response.text  # extract html contents
 soup = BeautifulSoup(html_doc, 'html.parser')  # use BeautifulSoup to parse html
 
-numRepos = 0  # variable to count number of repositories
+numRepos = 0  # variable to count number of repositories (also used as data frame index)
 
-columnHeadings = ['Repo', 'URL']
+# instantiate a Pandas object
 summaryTable = pd.DataFrame(columns=columnHeadings)
 
-# find all public repositories, print names and url's
-for tag in soup.find_all('a', {'itemprop': 'name codeRepository'}):
-    print(tag.string.lstrip(), baseURL.removesuffix('/') + tag.get('href'))
-    # save repository information in data frame summary table
-    summaryTable.loc[numRepos] = tag.string.lstrip(), baseURL.removesuffix('/') + tag.get('href')
+# find all user repositories and extract summary details (name, url, language, description)
+for tag in soup.find_all('li', {'itemprop': "owns"}):
+    repoName = tag.find('a')
+    repoName = repoName.string.lstrip()
+    repoURL = tag.find('a', {'itemprop': 'name codeRepository'})
+    repoURL = baseURL.removesuffix('/') + repoURL.get('href')
+    repoLanguage = tag.find('span', {'itemprop': 'programmingLanguage'})
+    repoLanguage = repoLanguage.string.lstrip()
+    repoDescription = tag.find('p', {'itemprop': 'description'})
+    repoDescription = repoDescription.string.lstrip()
+    repoDescription = repoDescription.rstrip()
+
+    # output to console
+    print(repoName, repoURL, repoLanguage, repoDescription)
+
+    # populate data frame summary table
+    summaryTable.at[numRepos, 'Repo'] = repoName
+    summaryTable.at[numRepos, 'URL'] = repoURL
+    summaryTable.at[numRepos, 'Language'] = repoLanguage
+    summaryTable.at[numRepos, 'Description'] = repoDescription
     numRepos += 1  # count number of repositories found
 
 print(f'\nNumber of repositories found = {numRepos}\n')
