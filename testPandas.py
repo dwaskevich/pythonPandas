@@ -22,7 +22,7 @@ while True:
     url = input("Enter Github user name: ")
 
     url = baseURL + url  # generate full url
-    print(url)
+    print(url, end='\n\n')
 
     # Send a GET request to the full/generated url (i.e. user's github landing page)
     response = requests.get(url)
@@ -47,7 +47,7 @@ for tag in soup.find_all('a', {'data-tab-item': 'repositories'}):
 # construct repositories url (remove trailing '/' on base URL to avoid double slash)
 url = baseURL.removesuffix('/') + repoURL
 
-print('Repositories url link: ', url)  # put link in console
+print('Repositories url link: ', url, end='\n\n')  # put link in console
 
 # Send a GET request to repositories url
 response = requests.get(url)
@@ -57,14 +57,20 @@ soup = BeautifulSoup(html_doc, 'html.parser')  # use BeautifulSoup to parse html
 
 numRepos = 0  # variable to count number of repositories
 
+columnHeadings = ['Repo', 'URL']
+summaryTable = pd.DataFrame(columns=columnHeadings)
+
 # find all public repositories, print names and url's
 for tag in soup.find_all('a', {'itemprop': 'name codeRepository'}):
-    print(tag.string, baseURL.removesuffix('/') + tag.get('href'))
-    summaryTable = pd.DataFrame({'Repo': [tag.string.lstrip()], 'URL': [baseURL.removesuffix('/') + tag.get('href')]})
-    numRepos += 1
+    print(tag.string.lstrip(), baseURL.removesuffix('/') + tag.get('href'))
+    # save repository information in data frame summary table
+    summaryTable.loc[numRepos] = tag.string.lstrip(), baseURL.removesuffix('/') + tag.get('href')
+    numRepos += 1  # count number of repositories found
 
-print(f'Number of repositories found = {numRepos}')
+print(f'\nNumber of repositories found = {numRepos}\n')
 
 print(summaryTable)
 
 print(type(summaryTable))
+
+summaryTable.to_csv('capturedData.csv', index=False)
