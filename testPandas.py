@@ -7,9 +7,9 @@ columnHeadings = ['Repo', 'URL', 'Language', 'Description']  # define data frame
 
 # get user input
 while True:
-    url = input("Enter Github user name: ")
+    userName = input("Enter Github user name: ")
 
-    url = baseURL + url  # generate full url
+    url = baseURL + userName  # generate full url
     print(url, end='\n\n')
 
     # Send a GET request to the full/generated url (i.e. user's github landing page)
@@ -86,6 +86,6 @@ print(f'\nNumber of repositories found = {numRepos}\n')
 print(summaryTable)
 
 # export captured data to .csv file
-summaryTable.to_csv('capturedData.csv', index=False)
+summaryTable.to_csv(userName + '.csv', index=False)
 
 print('\nWrote data to file: capturedData.csv.')
