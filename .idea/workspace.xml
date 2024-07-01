@@ -118,7 +118,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719789251049</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added test for no description">
+      <option name="closed" value="true" />
+      <created>1719796713220</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1719796713220</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -138,6 +146,7 @@
     <MESSAGE value="added requirements.txt" />
     <MESSAGE value="removed debug code. cleaned comments." />
     <MESSAGE value="expanded data frame to include columns for language and description" />
-    <option name="LAST_COMMIT_MESSAGE" value="expanded data frame to include columns for language and description" />
+    <MESSAGE value="added test for no description" />
+    <option name="LAST_COMMIT_MESSAGE" value="added test for no description" />
   </component>
 </project>
