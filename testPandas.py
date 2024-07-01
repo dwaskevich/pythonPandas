@@ -57,13 +57,14 @@ for tag in soup.find_all('li', {'itemprop': "owns"}):
     repoLanguage = tag.find('span', {'itemprop': 'programmingLanguage'})
     repoLanguage = repoLanguage.string.lstrip()
     repoDescription = tag.find('p', {'itemprop': 'description'})
-    repoDescription = repoDescription.string.lstrip()
-    repoDescription = repoDescription.rstrip()
+    if repoDescription is not None:
+        repoDescription = repoDescription.string.lstrip()
+        repoDescription = repoDescription.rstrip()
 
     # output to console
     print(repoName, repoURL, repoLanguage, repoDescription)
 
-    # populate data frame summary table
+    # populate data frame
     summaryTable.at[numRepos, 'Repo'] = repoName
     summaryTable.at[numRepos, 'URL'] = repoURL
     summaryTable.at[numRepos, 'Language'] = repoLanguage
@@ -74,5 +75,7 @@ print(f'\nNumber of repositories found = {numRepos}\n')
 
 print(summaryTable)
 
+# export captured data to .csv file
 summaryTable.to_csv('capturedData.csv', index=False)
+
 print('\nWrote data to file: capturedData.csv.')
