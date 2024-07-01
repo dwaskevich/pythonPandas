@@ -56,7 +56,8 @@ while True:
         repoURL = tag.find('a', {'itemprop': 'name codeRepository'})
         repoURL = baseURL.removesuffix('/') + repoURL.get('href')
         repoLanguage = tag.find('span', {'itemprop': 'programmingLanguage'})
-        repoLanguage = repoLanguage.string.lstrip()
+        if repoLanguage is not None:
+            repoLanguage = repoLanguage.string.lstrip()
         repoDescription = tag.find('p', {'itemprop': 'description'})
         if repoDescription is not None:
             repoDescription = repoDescription.string.lstrip()
