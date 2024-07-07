@@ -89,4 +89,4 @@ print(summaryTable)
 # export captured data to .csv file
 summaryTable.to_csv(userName + '.csv', index=False)
 
-print('\nWrote data to file: capturedData.csv.')
+print(f'\nWrote data to file: {userName + '.csv'}.')
